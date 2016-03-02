@@ -10,14 +10,11 @@
 		var self = this;
 
 		this.addListeners = function() {
-			var i = 0,
-				elements = document.getElementsByClassName(options.itemClass);
-			for (i; i < elements.length; i++) {
-				elements[i].addEventListener('click', function() {
-					var elementWithOpenClass,
-						j = 0;
-					if (this.classList.contains(options.openClass)) {
-						this.classList.remove(options.openClass);
+			document.getElementsByClassName(options.bodyClass)[0].addEventListener('click', function(e) {
+				if (e.target.classList.contains(options.clickableElementClass)) {
+					var elementWithOpenClass;
+					if (e.target.parentNode.classList.contains(options.openClass)) {
+						e.target.parentNode.classList.remove(options.openClass);
 					} else {
 						if (options.type === "usual") {
 							elementWithOpenClass = document.getElementsByClassName(options.openClass);
@@ -25,10 +22,10 @@
 								elementWithOpenClass[0].classList.remove(options.openClass);
 							}
 						}
-						this.classList.add(options.openClass);
+						e.target.parentNode.classList.add(options.openClass);
 					}
-				}, false);
-			}
+				}
+			}, true);
 		}
 
 		this.init = function() {
@@ -38,8 +35,9 @@
 
 	document.addEventListener("DOMContentLoaded", function() {
 		var options = {
-				itemClass: "item",
 				openClass: "open",
+				bodyClass: "body",
+				clickableElementClass: "item_title",
 				type: "usual", //can be usual or unusual - usual one open other close, unusual - can be open many tabs
 			},
 			accordeon = new Accordeon(options);
