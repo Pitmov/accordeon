@@ -1,46 +1,46 @@
 ;
 (function() {
-	"use strict";
+    "use strict";
 
-	function Accordeon(options) {
-		if (!(this instanceof Accordeon)) {
-			return new Accordeon(options);
-		}
+    function Accordeon(options) {
+        if (!(this instanceof Accordeon)) {
+            return new Accordeon(options);
+        }
 
-		var self = this;
+        var self = this,
+            openElement = document.querySelector('.' + options.openClass);
 
-		this.addListeners = function() {
-			document.getElementsByClassName(options.bodyClass)[0].addEventListener('click', function(e) {
-				if (e.target.classList.contains(options.clickableElementClass)) {
-					var elementWithOpenClass;
-					if (e.target.parentNode.classList.contains(options.openClass)) {
-						e.target.parentNode.classList.remove(options.openClass);
-					} else {
-						if (options.type === "usual") {
-							elementWithOpenClass = document.getElementsByClassName(options.openClass);
-							if (elementWithOpenClass.length > 0) {
-								elementWithOpenClass[0].classList.remove(options.openClass);
-							}
-						}
-						e.target.parentNode.classList.add(options.openClass);
-					}
-				}
-			}, true);
-		}
+        this.addListeners = function() {
+            document.querySelector('.' + options.bodyClass).addEventListener('click', function(e) {
+                if (e.target.classList.contains(options.clickableElementClass)) {
+                    if (e.target.parentNode.classList.contains(options.openClass)) {
+                        e.target.parentNode.classList.remove(options.openClass);
+                    } else {
+                        if (options.type === "usual") {
+                            if (openElement) {
+                                openElement.classList.remove(options.openClass);
+                            }
+                        }
+                        openElement = e.target.parentNode;
+                        openElement.classList.add(options.openClass);
+                    }
+                }
+            }, true);
+        }
 
-		this.init = function() {
-			this.addListeners();
-		}
-	}
+        this.init = function() {
+            this.addListeners();
+        }
+    }
 
-	document.addEventListener("DOMContentLoaded", function() {
-		var options = {
-				openClass: "open",
-				bodyClass: "body",
-				clickableElementClass: "item_title",
-				type: "usual", //can be usual or unusual - usual one open other close, unusual - can be open many tabs
-			},
-			accordeon = new Accordeon(options);
-		accordeon.init();
-	});
+    document.addEventListener("DOMContentLoaded", function() {
+        var options = {
+                openClass: "open",
+                bodyClass: "body",
+                clickableElementClass: "item_title",
+                type: "usual", //can be usual or unusual - usual one open other close, unusual - can be open many tabs
+            },
+            accordeon = new Accordeon(options);
+        accordeon.init();
+    });
 })();
